@@ -3,6 +3,7 @@ import re
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, classification_report
 
 
 def main():
@@ -40,8 +41,8 @@ def main():
     #  train with 70% of overall data and 30% testing
     X_train, X_test, y_train, y_test = train_test_split(df['text'], df['label'], test_size=0.3)
 
-    vectorizer = TfidfVectorizer(max_df=0.01, max_features=50)
-    X_train_vectorizer = vectorizer.fit_transform(vectorizer)
+    vectorizer = TfidfVectorizer(max_df=0.10, max_features=150)
+    X_train_vectorizer = vectorizer.fit_transform(X_train)
     X_test_vectorizer = vectorizer.transform(X_test)
 
     decisionTree = DecisionTreeClassifier()
@@ -50,20 +51,11 @@ def main():
     # run a prediction
     y_pred = decisionTree.predict(X_test_vectorizer)
 
-    # get tfidfVectorizer for each author
-    # austenList = northanger + pridePredjudice
-    #
-    # shellyList = frankenstein + theLastman
-    #
-    # vectorizerAusten = TfidfVectorizer(max_df=0.01, max_features=50)
-    # austenFeatures = vectorizerAusten.fit_transform(austenList)
-    # print(vectorizerAusten.get_feature_names_out())
-    # print(austenFeatures.shape)
-    #
-    # vectorizerShelly = TfidfVectorizer(max_df=0.01,max_features=50)
-    # shellyFeatures = vectorizerShelly.fit_transform(shellyList)
-    # print(shellyFeatures.shape)
-    # print(vectorizerShelly.get_feature_names_out())
+    accuracy = accuracy_score(y_test, y_pred)
+    report = classification_report(y_test, y_pred)
+
+    print(f"Accuracy: {accuracy}*100")
+    print(f"Classification Report:\n{report}")
 
 
 
